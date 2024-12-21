@@ -1,22 +1,25 @@
 const mongoose = require('mongoose')
 const { Schema } = require('mongoose')
-mongoose.connect('mongodb+srv://vikash2024:Vikash2024@cluster0.dib0h.mongodb.net/paytm')
+const dotenv = require('dotenv')
 
-const schema = new Schema({
+const dbUrl = process.env.DATABASE_URL;
+mongoose.connect(dbUrl);
+
+const userSchema = new Schema({
     firstName : {type : String, required : true},
     lastName : {type : String, required : true},
-    username : {
-        type : String, 
-        required : true,
-    },
-    password : {
-        type : String, 
-        required : true,
-    }
+    username : {type : String, required : true},
+    password : {type : String, required : true}
+})
+const User = mongoose.model('User', userSchema);
+
+const accountSchema = new Schema({
+    userId : {type : Schema.Types.ObjectId, ref : User, required : true},
+    balance : {type : Number, required : true}
 })
 
-const User = mongoose.model('User', schema);
+const Account = mongoose.model('Amount', accountSchema);
 
-module.exports = {User}
+module.exports = {User, Account};
 
 

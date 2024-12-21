@@ -1,13 +1,17 @@
-const JWT_SECRET = require("../config");
+const JWT_SECRET = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken')
 
 const authMiddleware = function(req, res, next) {
 
     const headerData = req.headers.authorization;
+    if(!headerData.startsWith('Bearer ')){
+        res.status(403).json('invalid token');
+    }
+
     const token = headerData.split(' ')[1];
 
     if(!token) {
-        res.status(403).json({msg : "invalid credintials"})
+        res.status(403).json({msg : "invalid token"})
     }
 
     try{
